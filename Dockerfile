@@ -1,1 +1,5 @@
-FROM alpine:3.14
+FROM ruby:3.0
+
+WORKDIR /usr/src/app
+
+COPY . .
