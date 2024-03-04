@@ -1,4 +1,4 @@
-EPOCH_REGEX = /^\[(?<epoch>\d+\.\d+)\]/.freeze
+MAIN_REGEX = /^\[(?<epoch>\d+\.\d+)\] (?<success>64 bytes)?/.freeze
 FIRST_LINE_REGEX = /^PING google.com/.freeze
 
 lines = File.readlines('./ping_results.txt', chomp: true)
@@ -10,9 +10,9 @@ processed_rows = lines.map do |line|
 
   seq = seq + 1
 
-  match = EPOCH_REGEX.match(line)
+  match = MAIN_REGEX.match(line)
 
-  processed_row = { seq: seq, connected: !!match }
+  processed_row = { seq: seq, connected: !!match['success'] }
 
   if match
     seconds_since_epoch_integer = match['epoch']
@@ -45,4 +45,5 @@ processed_rows.each_with_index do |row, index|
 end
 
 p seq
-p disconnections
+puts "Disconnections count: #{disconnections.count}"
+disconnections.each { |disconnection| puts disconnection }
