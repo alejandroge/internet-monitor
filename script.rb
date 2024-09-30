@@ -3,7 +3,6 @@ FIRST_LINE_REGEX = /^PING google.com/.freeze
 TIMEZONE = 'A' # CET
 
 lines = File.readlines('./ping_results.txt', chomp: true)
-line_count = lines.size
 
 seq = 0
 processed_rows = lines.map do |line|
@@ -13,7 +12,7 @@ processed_rows = lines.map do |line|
 
   match = MAIN_REGEX.match(line)
 
-  processed_row = { seq: seq, connected: !!match['success'] }
+  processed_row = { seq: seq, connected: match && match['success'] }
 
   if match
     seconds_since_epoch_integer = match['epoch']
@@ -45,6 +44,23 @@ processed_rows.each_with_index do |row, index|
   end
 end
 
-p seq
-puts "Disconnections count: #{disconnections.count}"
-disconnections.each { |disconnection| puts disconnection }
+
+time = Time.now
+formatted_time = time.strftime("%Y.%m.%d_%H:%M:%S")
+file_name = "report_#{formatted_time}"
+
+puts "Report saved to ./#{file_name}.txt"
+
+File.open("./#{file_name}.txt", "w") do |file|
+  puts "Analyzed lines: #{seq}"
+  file.puts "Analyzed lines: #{seq}"
+
+  puts "Disconnections count: #{disconnections.count}"
+  file.puts "Disconnections count: #{disconnections.count}"
+
+  disconnections.each do |disconnection|
+    puts disconnection
+    file.puts disconnection
+  end
+end
+
