@@ -1,5 +1,6 @@
 MAIN_REGEX = /^\[(?<epoch>\d+\.\d+)\] (?<success>64 bytes)?/.freeze
 FIRST_LINE_REGEX = /^PING google.com/.freeze
+TIMEZONE = 'A' # CET
 
 lines = File.readlines('./ping_results.txt', chomp: true)
 line_count = lines.size
@@ -16,7 +17,7 @@ processed_rows = lines.map do |line|
 
   if match
     seconds_since_epoch_integer = match['epoch']
-    time = Time.at(seconds_since_epoch_integer.to_i)
+    time = Time.at(seconds_since_epoch_integer.to_i, in: TIMEZONE)
     processed_row[:time] = time
   end
 
