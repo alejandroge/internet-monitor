@@ -41,7 +41,7 @@ Unit file should be moved to a run-able directory
 
 After the unit file is in there, the unit can be managed with `systemctl`
 ```sh
-systemctl start internet-monitor
-systemctl stop internet-monitor
-systemctl status internet-monitor
+systemctl start internet-monitor.service
+systemctl stop internet-monitor.service
+systemctl status internet-monitor.service
 ```
