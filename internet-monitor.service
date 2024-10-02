@@ -1,0 +1,11 @@
+[Unit]
+Description=Ping google and save the results to ping-results.log
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=alejandro
+ExecStart=/usr/bin/ping -i 30 -D google.com > /var/log/ping-internet-monitor.log
