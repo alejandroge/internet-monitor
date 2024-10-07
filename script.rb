@@ -1,12 +1,25 @@
 MAIN_REGEX = /^\[(?<epoch>\d+\.\d+)\] (?<success>64 bytes)?/.freeze
-FIRST_LINE_REGEX = /^PING google.com/.freeze
-TIMEZONE = 'A' # CET
+EXPECTED_LINES_WITHOUT_TIMESTAMPT = [
+  /^PING google.com/.freeze,
+  /^--- google.com/.freeze,
+  /^[0-9]+ packets transmitted/.freeze,
+  /^rtt min/.freeze,
+  /^\s*$/.freeze,
+]
 
-lines = File.readlines('./ping_results.txt', chomp: true)
+TIMEZONE = 'A' # CET
+PING_RESULTS_PATH = '/var/log/ping-internet-monitor.log'
+
+lines = File.readlines(PING_RESULTS_PATH, chomp: true)
 
 seq = 0
 processed_rows = lines.map do |line|
-  next if FIRST_LINE_REGEX.match?(line)
+  skip_line = EXPECTED_LINES_WITHOUT_TIMESTAMPT.any? { |regex| regex.match?(line) }
+
+  if skip_line
+    # puts "skipped_line: #{line}"
+    next
+  end
 
   seq = seq + 1
 

@@ -1,0 +1,15 @@
+[Unit]
+Description=Ping google and save the results to ping-results.log
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=/bin/bash -c "/usr/bin/ping -i 30 -D google.com >> /var/log/ping-internet-monitor.log"
+
+[Install]
+WantedBy=multi-user.target
+
