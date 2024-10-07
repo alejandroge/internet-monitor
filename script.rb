@@ -60,11 +60,11 @@ end
 
 time = Time.now
 formatted_time = time.strftime("%Y.%m.%d_%H:%M:%S")
-file_name = "report_#{formatted_time}"
+file_name = "report_#{formatted_time}.txt"
 
-puts "Report saved to ./#{file_name}.txt"
+puts "Report saved to ./#{file_name}"
 
-File.open("./#{file_name}.txt", "w") do |file|
+File.open(file_name, "w") do |file|
   puts "Analyzed lines: #{seq}"
   file.puts "Analyzed lines: #{seq}"
 
