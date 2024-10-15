@@ -4,6 +4,8 @@
 
 In order to install the unit, you must copy the `internet-monitor.service` file to the correct location using the following command.
 
+This will put the results of the a ping command to a log file in: `/var/log/ping-internet-monitor.log`
+
 ```sh
 cp internet-monitor.service /lib/systemd/system/
 ```
@@ -16,7 +18,7 @@ cp internet-monitor.service /lib/systemd/system/
 
 ### Run analysis of ping report
 
-Just run the script using Ruby. Any version should work. Ruby version in this repo is just locked to latest one. This will print on screen the disconnects, and will also print to a file in the repos directory.
+Just run the script using Ruby. This will print on screen the disconnects, and will also register the disconnects to a local sqlite3 database. Since this process is automated, this script also empties the `/var/log/pint-internet-monitor.log` after recording the disconnects.
 
 ```sh
 ruby script.rb
@@ -34,6 +36,5 @@ systemctl status internet-monitor.service
 
 ##### TODO:
 
-1. Abandon text reports, and use a DB instead. Then I can safely clean the logs every once in a while
-2. Do a web based ui for the disconnects information?
-3. Should probably create a small sh script, that installs the daemon.
+1. Do a web based ui for the disconnects information?
+2. Should probably create a small sh script, that installs the daemon.

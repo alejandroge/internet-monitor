@@ -1,3 +1,6 @@
+require_relative 'setup_database'
+require_relative 'network_disconnection_model'
+
 MAIN_REGEX = /^\[(?<epoch>\d+\.\d+)\] (?<success>64 bytes)?/.freeze
 EXPECTED_LINES_WITHOUT_TIMESTAMPT = [
   /^PING google.com/.freeze,
@@ -11,13 +14,14 @@ TIMEZONE = 'A' # CET
 PING_RESULTS_PATH = '/var/log/ping-internet-monitor.log'
 
 lines = File.readlines(PING_RESULTS_PATH, chomp: true)
+# clears the file, so we do not duplicate the disconnection reports
+File.open(PING_RESULTS_PATH, 'w') {}
 
 seq = 0
 processed_rows = lines.map do |line|
   skip_line = EXPECTED_LINES_WITHOUT_TIMESTAMPT.any? { |regex| regex.match?(line) }
 
   if skip_line
-    # puts "skipped_line: #{line}"
     next
   end
 
@@ -37,8 +41,6 @@ processed_rows = lines.map do |line|
 end.compact
 
 disconnected_active = false
-disconnected_at = nil
-
 disconnections = []
 
 processed_rows.each_with_index do |row, index|
@@ -57,23 +59,32 @@ processed_rows.each_with_index do |row, index|
   end
 end
 
+puts "Analyzed lines: #{seq}"
+puts "Disconnections count: #{disconnections.count}"
+
+return if disconnections.empty?
 
 time = Time.now
 formatted_time = time.strftime("%Y.%m.%d_%H:%M:%S")
 file_name = "report_#{formatted_time}.txt"
 
-puts "Report saved to ./#{file_name}"
+conn = DbConnection.create_new_connection!
 
 File.open(file_name, "w") do |file|
-  puts "Analyzed lines: #{seq}"
   file.puts "Analyzed lines: #{seq}"
 
-  puts "Disconnections count: #{disconnections.count}"
   file.puts "Disconnections count: #{disconnections.count}"
 
   disconnections.each do |disconnection|
+    NetworkDisconnectionModel.save!(
+      disconnected_at: disconnection[:disconnected_at].to_i,
+      reconnected_at: [disconnection[:reconnected_at] || time].to_i,
+      conn: conn,
+    )
     puts disconnection
     file.puts disconnection
   end
 end
+conn.close()
 
+puts "Report saved to ./#{file_name}"
