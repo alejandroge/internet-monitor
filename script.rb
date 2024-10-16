@@ -14,8 +14,6 @@ TIMEZONE = 'A' # CET
 PING_RESULTS_PATH = '/var/log/ping-internet-monitor.log'
 
 lines = File.readlines(PING_RESULTS_PATH, chomp: true)
-# clears the file, so we do not duplicate the disconnection reports
-File.open(PING_RESULTS_PATH, 'w') {}
 
 seq = 0
 processed_rows = lines.map do |line|
@@ -86,5 +84,8 @@ File.open(file_name, "w") do |file|
   end
 end
 conn.close()
+
+# clears the file, so we do not duplicate the disconnection reports
+File.open(PING_RESULTS_PATH, 'w') {}
 
 puts "Report saved to ./#{file_name}"
