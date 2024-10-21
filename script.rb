@@ -23,7 +23,6 @@ processed_rows = lines.map do |line|
   next if skip_line
 
   seq += 1
-
   match = MAIN_REGEX.match(line)
 
   processed_row = { seq: seq, connected: match && match['success'] }
