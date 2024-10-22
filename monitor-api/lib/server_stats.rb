@@ -9,7 +9,7 @@ class ServerStats
     @raw_disk_usage = `df -h /`
   end
 
-  def parsed_cpu_usage
+  def cpu_stats
     cpu_usage = CPU_USAGE_REGEX.match(@raw_cpu_usage)
 
     {
@@ -19,7 +19,7 @@ class ServerStats
     }
   end
 
-  def parsed_mem_usage
+  def memory_stats
     mem_usage = MEM_USAGE_REGEX.match(@raw_memory_info)
 
     {
@@ -29,7 +29,7 @@ class ServerStats
     }
   end
 
-  def parsed_disk_usage
+  def disk_stats
     disk_usage = DISK_USAGE_REGEX.match(@raw_disk_usage)
 
 
