@@ -1,0 +1,14 @@
+[Unit]
+Description=Run rails service to display disconnections and stats information
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+User=alejandro
+WorkingDirectory=/home/alejandro/Code/internet-monitor/monitor-api
+ExecStart=/bin/bash -c 'eval "$(rbenv init -)" && bundle exec rails s -e production'
+
+[Install]
+WantedBy=multi-user.target
+

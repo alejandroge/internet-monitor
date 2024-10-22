@@ -1,5 +1,3 @@
-json.greeting "Hola bola|"
-
 json.cpu do
   json.user @stats.cpu_stats[:user]
   json.system @stats.cpu_stats[:system]

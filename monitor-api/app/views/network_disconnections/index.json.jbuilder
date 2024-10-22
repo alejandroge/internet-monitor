@@ -1,5 +1,3 @@
-json.greeting "Hola mona"
-
 json.disconnections @network_disconnections do |network_disconnection|
   json.id network_disconnection.id
   json.created_at network_disconnection.created_at

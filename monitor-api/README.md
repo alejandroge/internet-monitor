@@ -1,24 +1,21 @@
-# README
+### Run the rails server
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Copy the service over to the appropiate folder
+```sh
+cp monitor-api.service /lib/systemd/system/
+```
 
-Things you may want to cover:
-
-* Ruby version
+```sh
+systemctl start monitor-api.service
+systemctl stop monitor-api.service
+systemctl status monitor-api.service
+```
 
 * System dependencies
-
-* Configuration
+Expects the database to be populated by an external script
 
 * Database creation
+Expects a `production.sqlite3` database to exists, that has the expected schema
 
 * Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Standard Rails commands can be used to set up the database for developoment, test and production
