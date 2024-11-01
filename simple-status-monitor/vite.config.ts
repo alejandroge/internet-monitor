@@ -7,6 +7,14 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   server: {
     host: '0.0.0.0',
+    proxy: {
+      '/api': {
+        target: 'http://raspberrypi.local:3000',
+          changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
   plugins: [
     vue(),

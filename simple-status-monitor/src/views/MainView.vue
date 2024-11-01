@@ -1,60 +1,53 @@
-<script type="module">
-import { computed } from 'vue'
-import { getSystemDetails, getDateTime } from '../lib/system'
+<template>
+  <section class="container">
+    <div class="tabs">
+      <ul>
+        <li
+            v-for="id, label in tabs" :key="id"
+            :class="{ 'is-active': isActiveTab(id) }">
+          <a @click="changeActiveTab(id)">
+            {{ label }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
 
-const systemDetails = computed(() => {
-  return getSystemDetails();
-});
+  <NetworkDisconnections v-show="activeTab === tabs.disconnections" />
+  <SystemStats v-show="activeTab === tabs.systemStats" />
+</template>
 
-const dateTime = computed(() => {
-  return getDateTime();
-});
+<script setup lang="ts">
+import NetworkDisconnections from '../components/NetworkDisconnections.vue';
+import SystemStats from '../components/SystemStats.vue';
 </script>
 
-<template>
-  <main>
-    <p>This is coming from the main page</p>
+<script type="module" lang="ts">
+import axios from 'axios';
 
-    <div>
-      <p>{{ `Date Time: ${dateTime}` }}</p>
-      <div class="section">
-        <div class="row">
-          <span >Hostname:</span>
-        </div>
-        <div class="row">
-          <span >Platform:</span>
-        </div>
-        <div class="row">
-          <span >Architecture:</span>
-        </div>
-        <div class="row">
-          <span >CPU Temperature:</span>
-          <span>{{ `${systemDetails.cpuTemp.toFixed(1)}°C` }}</span>
-        </div>
-      </div>
+const Tabs = {
+  disconnections: 1,
+  systemStats: 2,
+}
 
-      <div class="section">
-        <h3 class="text-lg font-semibold text-foreground">CPU Usage</h3>
-          <div v-for="(usage, index) in systemdetails.cpuUsage" :key="index" class="space-y-1">
-            <div class="row">
-              <span>{{ `Core ${index}` }}</span>
-              <span>{{ `${usage}%` }} </span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div class="section">
-        <h3 class="text-lg font-semibold text-foreground">Memory Usage</h3>
-        <div class="row">
-          <span>Used</span>
-          <span>
-            {{ systemDetails.memoryUsage.used.toFixed(2) }} /
-            {{ systemDetails.memoryUsage.total.toFixed(2) }} GB
-          </span>
-        </div>
-      </div>
-    </div>
-
-  </main>
-</template>
+export default {
+  data() {
+    return {
+      activeTab: Tabs.disconnections,
+      tabs: Tabs,
+    }
+  },
+  computed: {
+  },
+  methods: {
+    isActiveTab(id) {
+      return this.activeTab === id;
+    },
+    changeActiveTab(id) {
+      this.activeTab = id;
+    },
+  },
+  mounted() {
+  },
+}
+</script>

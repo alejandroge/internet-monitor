@@ -41,7 +41,7 @@ disconnections = []
 
 processed_rows.each_with_index do |row, index|
   if disconnected_active
-    next if !row[:connected]
+    next unless row[:connected]
 
     disconnected_active = false
     disconnections.last[:reconnected_at] = row[:time]
@@ -49,9 +49,11 @@ processed_rows.each_with_index do |row, index|
     next if row[:connected]
 
     disconnected_active = true
-    disconnections.push({
-      disconnected_at: processed_rows[index - 1][:time]
-    })
+    disconnections.push(
+      {
+        disconnected_at: processed_rows[index - 1][:time]
+      }
+    )
   end
 end
 
