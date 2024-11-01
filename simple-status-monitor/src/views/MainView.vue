@@ -3,10 +3,10 @@
     <div class="tabs">
       <ul>
         <li
-            v-for="id, label in tabs" :key="id"
+            v-for="id, key in tabs" :key="id"
             :class="{ 'is-active': isActiveTab(id) }">
           <a @click="changeActiveTab(id)">
-            {{ label }}
+            {{ tabLabels[id] }}
           </a>
         </li>
       </ul>
@@ -34,6 +34,10 @@ export default {
   data() {
     return {
       activeTab: Tabs.disconnections,
+      tabLabels: {
+        [Tabs.disconnections]: "Disconnections",
+        [Tabs.systemStats]: "System Stats",
+      },
       tabs: Tabs,
     }
   },

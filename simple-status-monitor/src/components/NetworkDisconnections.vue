@@ -1,7 +1,5 @@
 <template>
   <section class="container">
-    <h3 class="title is-3">Disconnections</h3>
-
     <table class="table">
       <thead>
         <tr>
