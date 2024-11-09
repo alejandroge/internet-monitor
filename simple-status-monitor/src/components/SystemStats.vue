@@ -93,57 +93,75 @@
   </section>
 </template>
 
-<script setup lang="ts">
-import { reactive, computed } from 'vue'
+<script type="module" lang="ts">
 import axios from 'axios'
 
 type Statistics = {
   cpu: {
-    user: Number
-    system: Number
-    idle: Number
+    user: number
+    system: number
+    idle: number
   }
   memory: {
-    free: Number
-    used: Number
-    total: Number
+    free: number
+    used: number
+    total: number
   }
   disk: {
-    avail: Number
-    used: Number
-    size: Number
+    avail: number
+    used: number
+    size: number
   }
 }
 
-let loadingStatistics = true
-let statistics: Statistics | object = reactive({})
-
-const printableMemoryStats = computed(() => {
-  if (!statistics) return statistics
-
-  return {
-    free: statistics.memory.free,
-    used: statistics.memory.used,
-  }
-})
-
-const printableDiskStats = computed(() => {
-  if (!statistics) return statistics
-
-  return {
-    free: statistics.disk.avail,
-    used: statistics.disk.used,
-  }
-})
-
-loadingStatistics = true
-axios({
-  method: 'get',
-  url: '/api/statistics.json',
-}).then(response => {
-  loadingStatistics = false
-  statistics = response.data
-})
+export default {
+  data(): { loadingStatistics: boolean; statistics: Statistics } {
+    return {
+      loadingStatistics: true,
+      statistics: {
+        cpu: {
+          user: 0,
+          system: 0,
+          idle: 0,
+        },
+        memory: {
+          free: 0,
+          used: 0,
+          total: 0,
+        },
+        disk: {
+          avail: 0,
+          used: 0,
+          size: 0,
+        },
+      },
+    }
+  },
+  computed: {
+    printableMemoryStats() {
+      return {
+        free: this.statistics.memory.free,
+        used: this.statistics.memory.used,
+      }
+    },
+    printableDiskStats() {
+      return {
+        free: this.statistics.disk.avail,
+        used: this.statistics.disk.used,
+      }
+    },
+  },
+  mounted() {
+    this.loadingStatistics = true
+    axios({
+      method: 'get',
+      url: '/api/statistics.json',
+    }).then(response => {
+      this.loadingStatistics = false
+      this.statistics = response.data
+    })
+  },
+}
 </script>
 
 <style scoped>
