@@ -76,7 +76,7 @@ File.open(file_name, 'w') do |file|
   disconnections.each do |disconnection|
     NetworkDisconnectionModel.save!(
       disconnected_at: disconnection[:disconnected_at].to_i,
-      reconnected_at: [disconnection[:reconnected_at] || time].to_i,
+      reconnected_at: (disconnection[:reconnected_at] || time).to_i,
       conn: conn
     )
     puts disconnection
