@@ -3,8 +3,10 @@
     <div class="tabs">
       <ul>
         <li
-            v-for="id, key in tabs" :key="id"
-            :class="{ 'is-active': isActiveTab(id) }">
+          v-for="(id, key) in tabs"
+          :key="key"
+          :class="{ 'is-active': isActiveTab(id) }"
+        >
           <a @click="changeActiveTab(id)">
             {{ tabLabels[id] }}
           </a>
@@ -18,13 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import NetworkDisconnections from '../components/NetworkDisconnections.vue';
-import SystemStats from '../components/SystemStats.vue';
+import NetworkDisconnections from '../components/NetworkDisconnections.vue'
+import SystemStats from '../components/SystemStats.vue'
 </script>
 
 <script type="module" lang="ts">
-import axios from 'axios';
-
 const Tabs = {
   disconnections: 1,
   systemStats: 2,
@@ -35,23 +35,20 @@ export default {
     return {
       activeTab: Tabs.disconnections,
       tabLabels: {
-        [Tabs.disconnections]: "Disconnections",
-        [Tabs.systemStats]: "System Stats",
+        [Tabs.disconnections]: 'Disconnections',
+        [Tabs.systemStats]: 'System Stats',
       },
       tabs: Tabs,
     }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    isActiveTab(id) {
-      return this.activeTab === id;
+    isActiveTab(id: number) {
+      return this.activeTab === id
     },
-    changeActiveTab(id) {
-      this.activeTab = id;
+    changeActiveTab(id: number) {
+      this.activeTab = id
     },
-  },
-  mounted() {
   },
 }
 </script>

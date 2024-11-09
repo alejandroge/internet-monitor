@@ -9,7 +9,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="disconnection in disconnectionData.disconnections" :key="disconnection.id">
+        <tr
+          v-for="disconnection in disconnectionData.disconnections"
+          :key="disconnection.id"
+        >
           <td>{{ disconnection.id }}</td>
           <td>{{ disconnection.disconnected_at }}</td>
           <td>{{ disconnection.reconnected_at }}</td>
@@ -20,7 +23,7 @@
 </template>
 
 <script type="module" lang="ts">
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data() {
@@ -31,10 +34,10 @@ export default {
   mounted() {
     axios({
       method: 'get',
-      url: '/api/network_disconnections.json'
-    }).then((response) => {
+      url: '/api/network_disconnections.json',
+    }).then(response => {
       this.disconnectionData = response.data
-    });
+    })
   },
 }
 </script>
