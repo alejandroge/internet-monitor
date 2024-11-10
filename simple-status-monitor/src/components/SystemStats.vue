@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <p v-if="loadingStatistics" class="loading">Loading</p>
+    <p v-if="loading" class="loading">Loading</p>
     <div v-else class="columns">
       <div class="column">
         <div class="card cpu">
@@ -115,9 +115,9 @@ type Statistics = {
 }
 
 export default {
-  data(): { loadingStatistics: boolean; statistics: Statistics } {
+  data(): { loading: boolean; statistics: Statistics } {
     return {
-      loadingStatistics: true,
+      loading: true,
       statistics: {
         cpu: {
           user: 0,
@@ -152,12 +152,12 @@ export default {
     },
   },
   mounted() {
-    this.loadingStatistics = true
+    this.loading = true
     axios({
       method: 'get',
-      url: '/api/statistics.json',
+      url: 'api/statistics.json',
     }).then(response => {
-      this.loadingStatistics = false
+      this.loading = false
       this.statistics = response.data
     })
   },

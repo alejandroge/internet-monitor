@@ -1,6 +1,7 @@
 <template>
   <section class="container">
-    <table class="table">
+    <p v-if="loading" class="loading">Loading</p>
+    <table v-else class="table">
       <thead>
         <tr>
           <th>id</th>
@@ -30,17 +31,20 @@ type Disconnection = {
 }
 
 export default {
-  data(): { disconnections: Disconnection[] } {
+  data(): { loading: boolean, disconnections: Disconnection[] } {
     return {
+      loading: true,
       disconnections: [],
     }
   },
   mounted() {
+    this.loading = true;
     axios({
       method: 'get',
-      url: '/api/network_disconnections.json',
+      url: 'api/network_disconnections.json',
     }).then(response => {
       this.disconnections = response.data.disconnections
+      this.loading = false;
     })
   },
 }
