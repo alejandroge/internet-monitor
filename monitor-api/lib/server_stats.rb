@@ -1,7 +1,7 @@
 class ServerStats
   CPU_USAGE_REGEX = /\s+(?<user>\d+\.\d+) us,.*\s+(?<system>\d+\.\d+) sy,.*\s+(?<idle>\d+\.\d+) id/
   MEM_USAGE_REGEX = /\s+(?<total>\d+\.\d+) total,.*\s+(?<free>\d+\.\d+) free,.*\s+(?<used>\d+\.\d+) used/
-  DISK_USAGE_REGEX = /\s+(?<size>\d+G)\s+(?<used>\d+G)\s+(?<avail>\d+G)/
+  DISK_USAGE_REGEX = /\s+(?<size>\d+\.?\d*G)\s+(?<used>\d+\.?\d*G)\s+(?<avail>\d+\.?\d*G)/
 
   def initialize
     @raw_cpu_usage = `top -bn1 | grep "Cpu(s)"` # Linux command
@@ -32,11 +32,10 @@ class ServerStats
   def disk_stats
     disk_usage = DISK_USAGE_REGEX.match(@raw_disk_usage)
 
-
     {
-      size: disk_usage[:size].to_i,
-      used: disk_usage[:used].to_i,
-      avail: disk_usage[:avail].to_i
+      size: disk_usage[:size].to_f,
+      used: disk_usage[:used].to_f,
+      avail: disk_usage[:avail].to_f
     }
   end
 end
