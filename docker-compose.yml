@@ -1,0 +1,9 @@
+services:
+  logger:
+    image: im-logger:latest
+    volumes:
+      - db-data:/db-data
+
+volumes:
+  db-data:
+

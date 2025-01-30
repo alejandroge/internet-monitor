@@ -4,7 +4,7 @@ require 'sqlite3'
 
 # Class to set up the database for the project
 class DbConnection
-  DB_NAME = 'internet-monitor.db'
+  DB_NAME = '/db-data/disconnections.sqlite3'
 
   INIT_SQL = <<-SQL
     CREATE TABLE IF NOT EXISTS network_disconnections (
