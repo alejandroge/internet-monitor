@@ -1,2 +1,4 @@
 *.db
 report_*.txt
+
+api/api
