@@ -1,0 +1,1 @@
+0 * * * * /app/process_ping_logs.sh > /db-data/cron.log 2>&1
