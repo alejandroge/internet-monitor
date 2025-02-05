@@ -5,41 +5,18 @@
 |_|_|_|_| |___|_| |_|_|___|_|     |_|_|_|___|_|_|_|_| |___|_|
 ```
 
-### Install the systemd unit
+### how to run it?
 
-In order to install the unit, you must copy the `internet-monitor.service` file to the correct location using the following command.
+Simply run the docker-compose up command. This will start the appropriate containers and the application will be available at `http://localhost:8081`.
 
-This will put the results of the a ping command to a log file in: `/var/log/ping-internet-monitor.log`
+> Note: you must build the go binary before running the docker-compose up command.
 
-```sh
-cp internet-monitor.service /lib/systemd/system/
-```
+### how does it work?
 
-### Add a crontab to generate the report of disconnections
+A bit more of info can be found in the individual README file of each service. But in general, the application is composed of 3 services:
 
-```sh
-(crontab -l; echo "0 0 * * * cd Code/internet-monitor && /home/alejandro/.rbenv/shims/ruby script") | crontab -
-```
+1. **logger**: this service logs the connection status, using a simple ping command in the console. It pings periodically, every 15 seconds. A ruby script is run every hour, which analyzes the logs results, and saves disconnection events in a sqlite3 database.
+2. **api**: minimal api, that exposes the disconnection events saved in the sqlite3 database. It has a single endpoint, that returns the disconnection events in a json format. It is written in Go.
+3. **frontend**: vuejs frontend using bulma, that consumes the api and displays the disconnection events in a table.
 
-### Run analysis of ping report
-
-Just run the script using Ruby. This will print on screen the disconnects, and will also register the disconnects to a local sqlite3 database. Since this process is automated, this script also empties the `/var/log/pint-internet-monitor.log` after recording the disconnects.
-
-```sh
-ruby script.rb
-```
-
-### Manage the service using `systemctl`
-
-This way we can use the systemctl to manage the service. The service will also restart if there a temporary throuble, even if the system itself restarts.
-
-```sh
-systemctl start internet-monitor.service
-systemctl stop internet-monitor.service
-systemctl status internet-monitor.service
-```
-
-##### TODO:
-
-1. Do a web based ui for the disconnects information?
-2. Should probably create a small sh script, that installs the daemon.
+When running docker compose, a volume is created. This volume is shared between the logger and the api services. The logs and the databse are stored in this volume, so they are persisted between runs.
