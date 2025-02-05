@@ -16,18 +16,15 @@
   </section>
 
   <NetworkDisconnections v-show="activeTab === tabs.disconnections" />
-  <SystemStats v-show="activeTab === tabs.systemStats" />
 </template>
 
 <script setup lang="ts">
 import NetworkDisconnections from '../components/NetworkDisconnections.vue'
-import SystemStats from '../components/SystemStats.vue'
 </script>
 
 <script type="module" lang="ts">
 const Tabs = {
   disconnections: 1,
-  systemStats: 2,
 }
 
 export default {
@@ -36,7 +33,6 @@ export default {
       activeTab: Tabs.disconnections,
       tabLabels: {
         [Tabs.disconnections]: 'Disconnections',
-        [Tabs.systemStats]: 'System Stats',
       },
       tabs: Tabs,
     }

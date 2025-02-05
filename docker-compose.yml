@@ -3,13 +3,25 @@ services:
     image: im-logger:latest
     volumes:
       - db-data:/db-data
+
   api:
     image: im-api:latest
     volumes:
       - db-data:/db-data
     ports:
       - "8080:8080"
+    networks:
+      - im-network
+
+  frontend:
+    image: im-frontend:latest
+    ports:
+      - "8081:80"
+    networks:
+      - im-network
 
 volumes:
   db-data:
 
+networks:
+  im-network:

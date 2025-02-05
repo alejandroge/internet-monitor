@@ -1,0 +1,20 @@
+:80 {
+  root * /usr/share/caddy
+  encode gzip zstd
+  file_server
+
+  # Proxy API calls to the backend service
+  handle_path /api/* {
+    reverse_proxy api:8080
+  }
+
+  handle_path /* {
+    # Ensure proper routing for Vue.js by rewriting requests to index.html
+    try_files {path} /index.html
+  }
+
+  log {
+    output file /var/log/caddy/vuejs-access.log
+  }
+}
+

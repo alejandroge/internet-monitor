@@ -41,9 +41,9 @@ export default {
     this.loading = true;
     axios({
       method: 'get',
-      url: 'api/network_disconnections.json',
+      url: '/api/network_disconnections',
     }).then(response => {
-      this.disconnections = response.data.disconnections
+      this.disconnections = response.data;
       this.loading = false;
     })
   },
