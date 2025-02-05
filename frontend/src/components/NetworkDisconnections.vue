@@ -12,8 +12,8 @@
       <tbody>
         <tr v-for="disconnection in disconnections" :key="disconnection.id">
           <td>{{ disconnection.id }}</td>
-          <td>{{ disconnection.disconnected_at }}</td>
-          <td>{{ disconnection.reconnected_at }}</td>
+          <td>{{ formatUnixTimestamp(disconnection.disconnected_at) }}</td>
+          <td>{{ formatUnixTimestamp(disconnection.reconnected_at) }}</td>
         </tr>
       </tbody>
     </table>
@@ -25,9 +25,9 @@ import axios from 'axios'
 
 type Disconnection = {
   id: number
-  created_at: string
-  disconnected_at: string
-  reconnected_at: string
+  created_at: number
+  disconnected_at: number
+  reconnected_at: number
 }
 
 export default {
@@ -35,6 +35,18 @@ export default {
     return {
       loading: true,
       disconnections: [],
+    }
+  },
+  methods: {
+    formatUnixTimestamp(timestamp: number): string {
+      const date = new Date(timestamp);
+      return new Intl.DateTimeFormat('default', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(date).replace(',', '');
     }
   },
   mounted() {

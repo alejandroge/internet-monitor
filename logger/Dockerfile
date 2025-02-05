@@ -27,5 +27,9 @@ COPY *.rb ./
 COPY connection_check_with_timestampt.sh setup.sh ./
 RUN chmod +x ./connection_check_with_timestampt.sh ./setup.sh
 
+# copy the ping logger script into the image
+COPY connection_check_with_timestampt.sh setup.sh process_ping_logs.sh ./
+RUN chmod +x ./connection_check_with_timestampt.sh ./setup.sh ./process_ping_logs.sh
+
 # we run the ping logger, and write the output to a file, and tail
 CMD ["./setup.sh"]

@@ -1,1 +1,1 @@
-* * * * * cd /app && PATH=/usr/local/bin bundle install && PATH=/usr/local/bin bundle exec ruby script.rb >> /db-data/cron.log 2>&1
+0 * * * * /app/process_ping_logs.sh > /db-data/cron.log 2>&1

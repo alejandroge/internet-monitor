@@ -1,7 +1,10 @@
 #!/bin/sh
 
-# Start the ping logging script
 touch /db-data/ping.log
+
+sh ./process_ping_logs.sh
+
+# Start the ping logging script
 sh ./connection_check_with_timestampt.sh &
 
 # Start cron in the background
